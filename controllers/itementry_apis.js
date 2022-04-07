@@ -1,7 +1,7 @@
 const { sequelize, Itementry, Ledger } = require("../models");
 
 const itementry_post = async (req, res) => {
-  const { brand, quantity, totalprice, itemid, volumeno, pageno, sno } =
+  const { brand, quantity, totalprice, itemid, volumeno, pageno, sno, consumetype } =
     req.body;
 
   try {
@@ -12,7 +12,7 @@ const itementry_post = async (req, res) => {
       ).then(async (insertedentry) => {
         const itementryid = insertedentry.dataValues.id;
         await Ledger.create(
-          { volumeno, pageno, sno, itementryid },
+          { volumeno, pageno, sno, consumetype, itementryid },
           { transaction: t }
         );
       });

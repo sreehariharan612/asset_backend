@@ -1,5 +1,6 @@
 const { sequelize } = require("./models");
 const express = require("express");
+var cors = require("cors");
 const {
   category_post,
   category_delete,
@@ -21,8 +22,17 @@ const {
   itementry_getone,
 } = require("./controllers/itementry_apis");
 
-const app = express();
+const {
+  user_post,
+  user_delete,
+  user_get,
+  // user_update,
+  login_post,
+  user_getaccesstoken,
+} = require("./controllers/user_apis");
 
+const app = express();
+app.use(cors());
 app.use(express.json());
 
 //category
@@ -43,6 +53,14 @@ app.post("/entry", itementry_post);
 app.get("/entry", itementry_get);
 app.get("/entry/:id", itementry_getone);
 app.delete("/entry/:id", itementry_delete);
+
+//user
+app.post("/user", user_post);
+app.post("/user/login", login_post);
+app.get("/user", user_get);
+app.get("/getaccesstoken", user_getaccesstoken);
+// app.get("/user/:id", user_update);
+app.delete("/user/:id", user_delete);
 
 app.listen({ port: 5000 }, async () => {
   try {

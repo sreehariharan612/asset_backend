@@ -40,6 +40,17 @@ module.exports = {
         min: 1,
     }
       },
+      consumetype:{
+        type: Sequelize.ENUM({
+          values:['consumable','nonconsumable']
+        }),
+          allowNull : false,
+          primaryKey: true,
+          validate: {          
+            notEmpty: true,
+            isIn: [['consumable', 'nonconsumable']]
+        }
+      },
       itementryid: {
         type: Sequelize.INTEGER,
         unique: true,

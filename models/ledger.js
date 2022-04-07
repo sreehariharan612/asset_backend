@@ -47,7 +47,17 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
         min: 1,
     }
-  }}, {
+  },
+    consumetype:{
+      type: DataTypes.ENUM({
+        values:['consumable','nonconsumable']
+      }),
+      allowNull : false,
+      validate: {          
+        notEmpty: true,
+        isIn: [['consumable', 'nonconsumable']]
+    }
+    }}, {
     sequelize,
     modelName: 'Ledger',
   });

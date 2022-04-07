@@ -7,7 +7,6 @@ const item_post = async (req, res) => {
     const item = await Item.create({ name, categoryid });
     return res.json(item);
   } catch (err) {
-    console.log(err);
     return res.status(500).json(err);
   }
 };

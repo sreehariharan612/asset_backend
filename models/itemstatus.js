@@ -1,53 +1,53 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Itementry extends Model {
+  class Itemstatus extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ Item, Ledger, Itemstatus }) {
-      this.belongsTo(Item, {
+    static associate({ Itementry, Location }) {
+      this.belongsTo(Itementry, {
         foreignKey: {
-          name: "itemid",
+          name: "itementryid",
           type: DataTypes.INTEGER,
           allowNull: false,
+        },
+        onDelete: "CASCADE",
+      });
+
+      this.belongsTo(Location, {
+        foreignKey: {
+          name: "locationid",
+          type: DataTypes.INTEGER,
+          defaultValue: null,
         },
         onDelete: "RESTRICT",
       });
-
-      this.hasOne(Ledger, {
-        foreignKey: {
-          name: "itementryid",
-          type: DataTypes.INTEGER,
-          allowNull: false,
-        },
-        onDelete: "CASCADE",
-      });
-
-      this.hasMany(Itemstatus, {
-        foreignKey: {
-          name: "itementryid",
-          type: DataTypes.INTEGER,
-          allowNull: false,
-        },
-        onDelete: "CASCADE",
-      });
+      // define association here
     }
-
-    // define association here
   }
-
-  Itementry.init(
+  Itemstatus.init(
     {
-      brand: {
+      status: {
         type: DataTypes.STRING,
+        allowNull: false,
         validate: {
           notEmpty: true,
+          isIn: [
+            [
+              "notassigned",
+              "condemned",
+              "assigned",
+              "missing",
+              "spare",
+              "transferred",
+            ],
+          ],
         },
       },
-      quantity: {
+      itemno: {
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
@@ -57,20 +57,11 @@ module.exports = (sequelize, DataTypes) => {
           min: 1,
         },
       },
-      totalprice: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-          isInt: true,
-          isNumeric: true,
-          notEmpty: true,
-        },
-      },
     },
     {
       sequelize,
-      modelName: "Itementry",
+      modelName: "Itemstatus",
     }
   );
-  return Itementry;
+  return Itemstatus;
 };

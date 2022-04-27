@@ -4,7 +4,6 @@ const { accessToken, jwtTokens } = require("../utils/helpers.js");
 const jwt = require("jsonwebtoken");
 
 const user_post = async (req, res) => {
-
   try {
     const hashpassword = await bcrypt.hash(req.body.password, 10);
     const user = await User.create({
@@ -13,14 +12,12 @@ const user_post = async (req, res) => {
       role: req.body.role,
     });
     return res.json(user);
-
   } catch (err) {
     return res.status(500).json(err);
   }
 };
 
 const login_post = async (req, res) => {
-
   try {
     const { email, password } = req.body;
     const user = await User.findOne({

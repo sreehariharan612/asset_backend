@@ -1,20 +1,31 @@
 "use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Itementries", {
+    await queryInterface.createTable("Itemstatuses", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      brand: {
+      status: {
         type: Sequelize.STRING,
+        allowNull: false,
         validate: {
           notEmpty: true,
+          isIn: [
+            [
+              "notassigned",
+              "condemned",
+              "assigned",
+              "missing",
+              "spare",
+              "transferred",
+            ],
+          ],
         },
       },
-      quantity: {
+      itemno: {
         type: Sequelize.INTEGER,
         allowNull: false,
         validate: {
@@ -24,25 +35,27 @@ module.exports = {
           min: 1,
         },
       },
-      totalprice: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        validate: {
-          isInt: true,
-          isNumeric: true,
-          notEmpty: true,
-        },
-      },
-      itemid: {
+      itementryid: {
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: "Items",
+            tableName: "Itementries",
+          },
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        allowNull: false,
+      },
+      locationid: {
+        type: Sequelize.INTEGER,
+        defaultValue: null,
+        references: {
+          model: {
+            tableName: "Locations",
           },
           key: "id",
         },
         onDelete: "RESTRICT",
-        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -55,6 +68,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Itementries");
+    await queryInterface.dropTable("Itemstatuses");
   },
 };

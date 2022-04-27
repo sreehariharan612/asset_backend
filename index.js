@@ -1,6 +1,8 @@
 const { sequelize } = require("./models");
 const express = require("express");
 var cors = require("cors");
+const { authenticate_Token } = require("./middleware/authorization");
+
 const {
   category_post,
   category_delete,
@@ -20,6 +22,7 @@ const {
   itementry_delete,
   itementry_get,
   itementry_getone,
+  itementry_nonconsumable,
 } = require("./controllers/itementry_apis");
 
 const {
@@ -30,6 +33,20 @@ const {
   login_post,
   user_getaccesstoken,
 } = require("./controllers/user_apis");
+
+const {
+  itemstatus_post,
+  based_on_itemstatus,
+  itemstatus_decline,
+  status_update,
+} = require("./controllers/itemstatus_apis");
+
+const {
+  location_post,
+  location_delete,
+  location_get,
+  location_update,
+} = require("./controllers/location_apis");
 
 const app = express();
 app.use(cors());
@@ -49,10 +66,23 @@ app.put("/item/:id", item_update);
 app.delete("/item/:id", item_delete);
 
 //items_entry
-app.post("/entry", itementry_post);
-app.get("/entry", itementry_get);
-app.get("/entry/:id", itementry_getone);
-app.delete("/entry/:id", itementry_delete);
+app.post("/item/entry", itementry_post);
+app.get("/item/entry", itementry_get);
+app.get("/item/entry/:id", itementry_getone);
+app.delete("/item/entry/:id", itementry_delete);
+app.get("/entry/nonconsumable", itementry_nonconsumable);
+
+//itemstatus
+app.post("/item/status/accept", itemstatus_post);
+app.put("/item/status/decline", itemstatus_decline);
+app.put("/item/status/:id", status_update);
+app.get("/item/status", based_on_itemstatus);
+
+//location
+app.post("/location", location_post);
+app.get("/location", location_get);
+app.put("/location/:id", location_update);
+app.delete("/location/:id", location_delete);
 
 //user
 app.post("/user", user_post);

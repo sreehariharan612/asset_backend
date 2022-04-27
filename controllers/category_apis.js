@@ -13,7 +13,9 @@ const category_post = async (req, res) => {
 
 const category_get = async (req, res) => {
   try {
-    const category = await Category.findAll();
+    const category = await Category.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
     return res.json(category);
   } catch (err) {
     return res.status(500).json(err);

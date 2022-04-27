@@ -28,13 +28,11 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       role: {
-        type: DataTypes.ENUM({
-          values: ["HOD", "superdent", "assigner"],
-        }),
+        type: DataTypes.STRING,
         allowNull: false,
         validate: {
           notEmpty: true,
-          isIn: [["HOD", "superdent", "assigner"]],
+          isIn: [["HOD", "superintendent", "assigner"]],
         },
       },
     },

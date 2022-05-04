@@ -58,7 +58,7 @@ const based_on_itemstatus = async (req, res) => {
       include: [
         {
           model: Location,
-          attributes: ["name"],
+          attributes: ["name","id"],
         },
         {
           model: Itementry,

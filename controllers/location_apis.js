@@ -14,6 +14,7 @@ const location_post = async (req, res) => {
 const location_get = async (req, res) => {
   try {
     const location = await Location.findAll({
+      order: [['id', 'DESC']],
       attributes: { exclude: ["createdAt", "updatedAt"] },
     });
     return res.json(location);

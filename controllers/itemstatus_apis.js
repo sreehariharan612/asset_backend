@@ -53,6 +53,7 @@ const based_on_itemstatus = async (req, res) => {
   const stat = req.query.itemstatus;
   try {
     const itemstatus = await Itemstatus.findAll({
+      order: [['id', 'DESC']],
       where: { status: stat },
       include: [
         {
@@ -61,7 +62,8 @@ const based_on_itemstatus = async (req, res) => {
         },
         {
           model: Itementry,
-          attributes: ["id", "brand", "quantity", "totalprice"],
+          attributes: ["id", "brand", "quantity", "totalprice","createdAt",
+          "updatedAt"],
           include: [
             {
               model: Ledger,

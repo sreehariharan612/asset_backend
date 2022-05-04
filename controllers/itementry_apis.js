@@ -35,6 +35,8 @@ const itementry_post = async (req, res) => {
 const itementry_get = async (req, res) => {
   try {
     const itementry = await Itementry.findAll({
+      order: [["id", "DESC"]],
+
       // // include: { all: true, nested: true },
       //  include:[ Item, Category]
       include: [
@@ -46,7 +48,14 @@ const itementry_get = async (req, res) => {
       ],
       attributes: { exclude: ["itemid"] },
     });
-    return res.json(itementry);
+    const itementryprice = await Itementry.findAll({
+      attributes: [[sequelize.fn("sum", sequelize.col("totalprice")), "total"]],
+    });
+    // console.log("sds",itementryprice[0].dataValues.total);
+    return res.json({
+      datas: itementry,
+      totalprice: itementryprice[0].dataValues.total,
+    });
   } catch (err) {
     return res.status(500).json(err);
   }
@@ -100,6 +109,7 @@ const itementry_delete = async (req, res) => {
 const itementry_nonconsumable = async (req, res) => {
   try {
     const itementry = await Ledger.findAll({
+      order: [["id", "DESC"]],
       where: {
         [Op.and]: [
           { consumetype: "nonconsumable" },
@@ -134,10 +144,31 @@ const itementry_nonconsumable = async (req, res) => {
   }
 };
 
+const itementry_yearfilter = async (req, res) => {
+  console.log("from", req.query.from);
+  console.log("to", req.query.to);
+  const fromdate = req.query.from;
+  const todate = req.query.to;
+  try {
+    const itementry = await Itementry.findAll({
+      where: {
+        createdAt: {
+          [Op.between]: [fromdate, todate],
+        },
+      },
+    });
+
+    return res.json(itementry);
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+};
+
 module.exports = {
   itementry_post,
   itementry_getone,
   itementry_get,
   itementry_delete,
   itementry_nonconsumable,
+  itementry_yearfilter,
 };

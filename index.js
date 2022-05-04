@@ -23,6 +23,7 @@ const {
   itementry_get,
   itementry_getone,
   itementry_nonconsumable,
+  itementry_yearfilter,
 } = require("./controllers/itementry_apis");
 
 const {
@@ -48,6 +49,8 @@ const {
   location_update,
 } = require("./controllers/location_apis");
 
+const { card_api } = require("./controllers/chart_apis");
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -71,6 +74,7 @@ app.get("/item/entry", itementry_get);
 app.get("/item/entry/:id", itementry_getone);
 app.delete("/item/entry/:id", itementry_delete);
 app.get("/entry/nonconsumable", itementry_nonconsumable);
+app.get("/entry", itementry_yearfilter);
 
 //itemstatus
 app.post("/item/status/accept", itemstatus_post);
@@ -91,6 +95,9 @@ app.get("/user", user_get);
 app.get("/getaccesstoken", user_getaccesstoken);
 // app.get("/user/:id", user_update);
 app.delete("/user/:id", user_delete);
+
+// hod charts
+app.get("/hod/charts", card_api);
 
 app.listen({ port: 5000 }, async () => {
   try {

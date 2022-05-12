@@ -14,7 +14,7 @@ const item_post = async (req, res) => {
 const item_get = async (req, res) => {
   try {
     const item = await Item.findAll({
-      order: [['id', 'DESC']],
+      order: [["id", "DESC"]],
       include: [
         {
           model: Category,

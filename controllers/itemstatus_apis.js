@@ -5,7 +5,9 @@ const {
   Itementry,
   Location,
   Item,
+  Staff,
   Category,
+  History,
 } = require("../models");
 const { Op } = require("sequelize");
 
@@ -25,7 +27,7 @@ const itemstatus_post = async (req, res) => {
       },
       { transaction: t }
     );
-    ledger.itemstatusentry = true;
+    ledger.hasitemstatusentry = true;
     await ledger.save();
     await t.commit();
     return res.json("record created");
@@ -41,7 +43,7 @@ const itemstatus_decline = async (req, res) => {
     const ledger = await Ledger.findOne({
       where: { itementryid: itementryid },
     });
-    ledger.itemstatusentry = true;
+    ledger.hasitemstatusentry = true;
     await ledger.save();
     return res.json("record updated");
   } catch (err) {
@@ -53,17 +55,27 @@ const based_on_itemstatus = async (req, res) => {
   const stat = req.query.itemstatus;
   try {
     const itemstatus = await Itemstatus.findAll({
-      order: [['id', 'DESC']],
+      order: [["id", "DESC"]],
       where: { status: stat },
       include: [
         {
           model: Location,
-          attributes: ["name","id"],
+          attributes: ["name", "id"],
+        },
+        {
+          model: Staff,
+          attributes: ["name", "id", "designation"],
         },
         {
           model: Itementry,
-          attributes: ["id", "brand", "quantity", "totalprice","createdAt",
-          "updatedAt"],
+          attributes: [
+            "id",
+            "brand",
+            "quantity",
+            "totalprice",
+            "createdAt",
+            "updatedAt",
+          ],
           include: [
             {
               model: Ledger,
@@ -77,7 +89,7 @@ const based_on_itemstatus = async (req, res) => {
           ],
         },
       ],
-      attributes: { exclude: ["locationid", "itementryid"] },
+      attributes: { exclude: ["locationid", "itementryid", "staffid"] },
     });
     return res.json(itemstatus);
   } catch (err) {
@@ -87,14 +99,33 @@ const based_on_itemstatus = async (req, res) => {
 
 const status_update = async (req, res) => {
   const id = req.params.id;
-  const { status, locationid } = req.body;
+  const { status, locationid, staffid } = req.body;
+  const t = await sequelize.transaction();
+
   try {
     const itemstatus = await Itemstatus.findOne({
       where: { id: id },
     });
-    itemstatus.status = status;
-    itemstatus.locationid = locationid;
-    await itemstatus.save();
+    // itemstatus.status = status;
+    // itemstatus.locationid = locationid;
+    // itemstatus.staffid = staffid;
+    // await itemstatus.save();
+    await itemstatus.update(
+      { status, locationid, staffid },
+      { transaction: t }
+    );
+
+    const history = await History.create(
+      {
+        paststatus: status,
+        itemstatusid: id,
+        pastlocationid: locationid,
+        paststaffid: staffid,
+      },
+      { transaction: t }
+    );
+    await t.commit();
+
     return res.json(itemstatus);
   } catch (err) {
     return res.status(500).json(err);

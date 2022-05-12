@@ -40,7 +40,7 @@ module.exports = {
           min: 1,
         },
       },
-      itemstatusentry: {
+      hasitemstatusentry: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false,

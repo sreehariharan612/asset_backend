@@ -75,7 +75,7 @@ const itementry_getone = async (req, res) => {
               "itementryid",
               "createdAt",
               "updatedAt",
-              "itemstatusentry",
+              "hasitemstatusentry",
             ],
           },
         },
@@ -113,7 +113,7 @@ const itementry_nonconsumable = async (req, res) => {
       where: {
         [Op.and]: [
           { consumetype: "nonconsumable" },
-          { itemstatusentry: false },
+          { hasitemstatusentry: false },
         ],
       },
       include: [
@@ -136,7 +136,7 @@ const itementry_nonconsumable = async (req, res) => {
           ],
         },
       ],
-      attributes: ["id"],
+      attributes: ["id", "volumeno", "pageno", "sno"],
     });
     return res.json(itementry);
   } catch (err) {
@@ -151,11 +151,20 @@ const itementry_yearfilter = async (req, res) => {
   const todate = req.query.to;
   try {
     const itementry = await Itementry.findAll({
+      order: [["id", "DESC"]],
       where: {
         createdAt: {
           [Op.between]: [fromdate, todate],
         },
       },
+      include: [
+        {
+          model: Item,
+          attributes: ["name"],
+          include: [{ model: Category, attributes: ["name"] }],
+        },
+      ],
+      attributes: { exclude: ["itemid"] },
     });
 
     return res.json(itementry);

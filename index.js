@@ -49,6 +49,15 @@ const {
   location_update,
 } = require("./controllers/location_apis");
 
+const {
+  staff_post,
+  staff_delete,
+  staff_get,
+  staff_update,
+} = require("./controllers/staff_apis");
+
+const { history_item, history_staff } = require("./controllers/history_apis");
+
 const { card_api } = require("./controllers/chart_apis");
 
 const app = express();
@@ -87,6 +96,16 @@ app.post("/location", location_post);
 app.get("/location", location_get);
 app.put("/location/:id", location_update);
 app.delete("/location/:id", location_delete);
+
+//staff
+app.post("/staff", staff_post);
+app.get("/staff", staff_get);
+app.put("/staff/:id", staff_update);
+app.delete("/staff/:id", staff_delete);
+
+//history
+app.get("/history/item/:id", history_item);
+app.get("/history/staff/:id", history_staff);
 
 //user
 app.post("/user", user_post);

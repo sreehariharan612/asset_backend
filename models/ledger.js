@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
           min: 1,
         },
       },
-      itemstatusentry: {
+      hasitemstatusentry: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
         allowNull: false,

@@ -1,48 +1,64 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Location extends Model {
+  class History extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ Itemstatus, History }) {
+    static associate({ Itemstatus, Location, Staff }) {
       // define association here
-      this.hasMany(Itemstatus, {
+      this.belongsTo(Itemstatus, {
         foreignKey: {
-          name: "locationid",
+          name: "itemstatusid",
           type: DataTypes.INTEGER,
           allowNull: false,
+        },
+        onDelete: "CASCADE",
+      });
+
+      this.belongsTo(Location, {
+        foreignKey: {
+          name: "pastlocationid",
+          type: DataTypes.INTEGER,
         },
         onDelete: "RESTRICT",
       });
 
-      this.hasMany(History, {
+      this.belongsTo(Staff, {
         foreignKey: {
-          name: "pastlocationid",
+          name: "paststaffid",
           type: DataTypes.INTEGER,
-          allowNull: false,
         },
         onDelete: "RESTRICT",
       });
     }
   }
-  Location.init(
+  History.init(
     {
-      name: {
+      paststatus: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
         validate: {
           notEmpty: true,
+          isIn: [
+            [
+              "notassigned",
+              "condemned",
+              "assigned",
+              "missing",
+              "spare",
+              "transferred",
+            ],
+          ],
         },
       },
     },
     {
       sequelize,
-      modelName: "Location",
+      modelName: "History",
     }
   );
-  return Location;
+  return History;
 };

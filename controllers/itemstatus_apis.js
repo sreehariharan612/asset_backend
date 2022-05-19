@@ -108,6 +108,7 @@ const itemstatus_all = async (req, res) => {
           model: Itementry,
           attributes: [
             "quantity",    
+            "createdAt"
           ],
           include: [
             {

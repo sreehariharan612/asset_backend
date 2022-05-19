@@ -24,7 +24,7 @@ const history_staff = async (req, res) => {
         },
         {
           model: Staff,
-          attributes: ["name", "designation"],
+          attributes: ["regid","name", "designation"],
         },
         {
           model: Itemstatus,
@@ -77,7 +77,7 @@ const history_item = async (req, res) => {
         },
         {
           model: Staff,
-          attributes: ["name", "designation"],
+          attributes: ["regid","name", "designation"],
         },
         {
           model: Itemstatus,

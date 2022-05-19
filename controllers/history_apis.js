@@ -28,7 +28,7 @@ const history_staff = async (req, res) => {
         },
         {
           model: Itemstatus,
-          attributes: ["itemno"],
+          attributes: ["itemno","createdAt"],
           include: [
             {
               model: Itementry,
@@ -54,7 +54,6 @@ const history_staff = async (req, res) => {
           "itemstatusid",
           "paststaffid",
           "createdAt",
-          "updatedAt",
         ],
       },
     });
@@ -82,7 +81,7 @@ const history_item = async (req, res) => {
         },
         {
           model: Itemstatus,
-          attributes: ["itemno"],
+          attributes: ["itemno","createdAt"],
           include: [
             {
               model: Itementry,
@@ -108,7 +107,6 @@ const history_item = async (req, res) => {
           "itemstatusid",
           "paststaffid",
           "createdAt",
-          "updatedAt",
         ],
       },
     });

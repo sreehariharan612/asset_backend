@@ -173,6 +173,37 @@ const itementry_yearfilter = async (req, res) => {
   }
 };
 
+const itementry_itemname = async (req, res) => {
+  console.log(" iam in ",req.query.itemname);
+  const itemname = req.query.itemname;
+  try{
+    const itementry = await Itementry.findAll({
+      order: [["id", "DESC"]],
+     
+      include: [
+        {
+          model: Item,
+          attributes: ["name"],
+          where: {
+              name :{
+                [Op.eq]: itemname
+              }
+          },
+          include: [{ model: Category, attributes: ["name"] }],
+        },
+      ],
+      attributes: { exclude: ["itemid"] },
+    });
+
+    return res.json(itementry);
+
+
+  }
+  catch(err){
+    return res.status(500).json(err);
+  }
+}
+
 module.exports = {
   itementry_post,
   itementry_getone,
@@ -180,4 +211,5 @@ module.exports = {
   itementry_delete,
   itementry_nonconsumable,
   itementry_yearfilter,
+  itementry_itemname
 };

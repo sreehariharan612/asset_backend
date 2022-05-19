@@ -24,6 +24,7 @@ const {
   itementry_getone,
   itementry_nonconsumable,
   itementry_yearfilter,
+  itementry_itemname
 } = require("./controllers/itementry_apis");
 
 const {
@@ -83,7 +84,9 @@ app.get("/item/entry", itementry_get);
 app.get("/item/entry/:id", itementry_getone);
 app.delete("/item/entry/:id", itementry_delete);
 app.get("/entry/nonconsumable", itementry_nonconsumable);
-app.get("/entry", itementry_yearfilter);
+// changes made on api path from last commit
+app.get("/entry/year", itementry_yearfilter);
+app.get("/entry/item",itementry_itemname);
 
 //itemstatus
 app.post("/item/status/accept", itemstatus_post);

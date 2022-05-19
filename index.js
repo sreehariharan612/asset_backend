@@ -41,6 +41,7 @@ const {
   based_on_itemstatus,
   itemstatus_decline,
   status_update,
+  itemstatus_all
 } = require("./controllers/itemstatus_apis");
 
 const {
@@ -93,6 +94,7 @@ app.post("/item/status/accept", itemstatus_post);
 app.put("/item/status/decline", itemstatus_decline);
 app.put("/item/status/:id", status_update);
 app.get("/item/status", based_on_itemstatus);
+app.get("/item/status/all",itemstatus_all);
 
 //location
 app.post("/location", location_post);

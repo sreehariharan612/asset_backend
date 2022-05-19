@@ -97,6 +97,40 @@ const based_on_itemstatus = async (req, res) => {
   }
 };
 
+
+const itemstatus_all = async (req, res) => {
+  try {
+    const itemstatus = await Itemstatus.findAll({
+      order: [["id", "DESC"]],
+      include: [
+        
+        {
+          model: Itementry,
+          attributes: [
+            "quantity",    
+          ],
+          include: [
+            {
+              model: Ledger,
+              attributes: ["sno", "pageno", "volumeno", "consumetype"],
+            },
+            {
+              model: Item,
+              attributes: ["name"],
+              include: [{ model: Category, attributes: ["name"] }],
+            },
+          ],
+        },
+      ],
+      attributes: { exclude: ["locationid", "itementryid", "staffid","status","createdAt","updatedAt"] },
+    });
+    return res.json(itemstatus);
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+};
+
+
 const status_update = async (req, res) => {
   const id = req.params.id;
   const { status, locationid, staffid } = req.body;
@@ -137,4 +171,5 @@ module.exports = {
   based_on_itemstatus,
   itemstatus_decline,
   status_update,
+  itemstatus_all
 };

@@ -33,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       regid: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        unique: true,
         validate: {
           isInt: true,
           isNumeric: true,

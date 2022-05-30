@@ -74,7 +74,6 @@ const based_on_itemstatus = async (req, res) => {
             "quantity",
             "totalprice",
             "createdAt",
-            "updatedAt",
           ],
           include: [
             {

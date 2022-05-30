@@ -46,16 +46,13 @@ const itementry_get = async (req, res) => {
           include: [{ model: Category, attributes: ["name"] }],
         },
       ],
-      attributes: { exclude: ["itemid"] },
+      attributes: { exclude: ["itemid","updatedAt"] },
     });
-    const itementryprice = await Itementry.findAll({
-      attributes: [[sequelize.fn("sum", sequelize.col("totalprice")), "total"]],
-    });
+    // const itementryprice = await Itementry.findAll({
+    //   attributes: [[sequelize.fn("sum", sequelize.col("totalprice")), "total"]],
+    // });
     // console.log("sds",itementryprice[0].dataValues.total);
-    return res.json({
-      datas: itementry,
-      totalprice: itementryprice[0].dataValues.total,
-    });
+    return res.json(itementry);
   } catch (err) {
     return res.status(500).json(err);
   }
@@ -85,7 +82,7 @@ const itementry_getone = async (req, res) => {
           include: [{ model: Category, attributes: ["name"] }],
         },
       ],
-      attributes: { exclude: ["itemid"] },
+      attributes: { exclude: ["itemid","updatedAt"] },
     });
     return res.json(itementry);
   } catch (err) {
@@ -93,18 +90,7 @@ const itementry_getone = async (req, res) => {
   }
 };
 
-const itementry_delete = async (req, res) => {
-  const id = req.params.id;
-  try {
-    const itementry = await Itementry.findOne({
-      where: { id: id },
-    });
-    await itementry.destroy();
-    return res.json(itementry);
-  } catch (err) {
-    return res.status(500).json(err);
-  }
-};
+
 
 const itementry_nonconsumable = async (req, res) => {
   try {
@@ -125,7 +111,6 @@ const itementry_nonconsumable = async (req, res) => {
             "quantity",
             "totalprice",
             "createdAt",
-            "updatedAt",
           ],
           include: [
             {
@@ -164,7 +149,7 @@ const itementry_yearfilter = async (req, res) => {
           include: [{ model: Category, attributes: ["name"] }],
         },
       ],
-      attributes: { exclude: ["itemid"] },
+            attributes: { exclude: ["itemid","updatedAt"] },
     });
 
     return res.json(itementry);
@@ -192,7 +177,7 @@ const itementry_itemname = async (req, res) => {
           include: [{ model: Category, attributes: ["name"] }],
         },
       ],
-      attributes: { exclude: ["itemid"] },
+      attributes: { exclude: ["itemid","updatedAt"] },
     });
 
     return res.json(itementry);
@@ -208,7 +193,6 @@ module.exports = {
   itementry_post,
   itementry_getone,
   itementry_get,
-  itementry_delete,
   itementry_nonconsumable,
   itementry_yearfilter,
   itementry_itemname

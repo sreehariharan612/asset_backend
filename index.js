@@ -7,19 +7,16 @@ const {
   category_post,
   category_delete,
   category_get,
-  category_update,
 } = require("./controllers/category_apis");
 
 const {
   item_post,
   item_delete,
   item_get,
-  item_update,
 } = require("./controllers/item_apis");
 
 const {
   itementry_post,
-  itementry_delete,
   itementry_get,
   itementry_getone,
   itementry_nonconsumable,
@@ -31,9 +28,13 @@ const {
   user_post,
   user_delete,
   user_get,
-  // user_update,
   login_post,
   user_getaccesstoken,
+  firstuser_post,
+  user_update,
+  forgotpassword,
+  changepassword
+
 } = require("./controllers/user_apis");
 
 const {
@@ -48,14 +49,12 @@ const {
   location_post,
   location_delete,
   location_get,
-  location_update,
 } = require("./controllers/location_apis");
 
 const {
   staff_post,
   staff_delete,
   staff_get,
-  staff_update,
 } = require("./controllers/staff_apis");
 
 const { history_item, history_staff } = require("./controllers/history_apis");
@@ -67,23 +66,19 @@ app.use(cors());
 app.use(express.json());
 
 //category
-
 app.post("/category", category_post);
 app.get("/category", category_get);
-app.put("/category/:id", category_update);
 app.delete("/category/:id", category_delete);
 
 //items
 app.post("/item", item_post);
 app.get("/item", item_get);
-app.put("/item/:id", item_update);
 app.delete("/item/:id", item_delete);
 
 //items_entry
 app.post("/item/entry", itementry_post);
 app.get("/item/entry", itementry_get);
 app.get("/item/entry/:id", itementry_getone);
-app.delete("/item/entry/:id", itementry_delete);
 app.get("/entry/nonconsumable", itementry_nonconsumable);
 // changes made on api path from last commit
 app.get("/entry/year", itementry_yearfilter);
@@ -99,13 +94,11 @@ app.get("/item/status/all",itemstatus_all);
 //location
 app.post("/location", location_post);
 app.get("/location", location_get);
-app.put("/location/:id", location_update);
 app.delete("/location/:id", location_delete);
 
 //staff
 app.post("/staff", staff_post);
 app.get("/staff", staff_get);
-app.put("/staff/:id", staff_update);
 app.delete("/staff/:id", staff_delete);
 
 //history
@@ -113,12 +106,18 @@ app.get("/history/item/:id", history_item);
 app.get("/history/staff/:id", history_staff);
 
 //user
+app.post("/user/first",firstuser_post);
 app.post("/user", user_post);
+
 app.post("/user/login", login_post);
-app.get("/user", user_get);
-app.get("/getaccesstoken", user_getaccesstoken);
-// app.get("/user/:id", user_update);
+app.post("/user/forgotpassword", forgotpassword);
+app.post("/user/changepassword/:id", changepassword);
+
 app.delete("/user/:id", user_delete);
+app.put("/user/:id",user_update);
+app.get("/user", user_get);
+
+app.get("/getaccesstoken", user_getaccesstoken);
 
 // hod charts
 app.get("/hod/charts", card_api);

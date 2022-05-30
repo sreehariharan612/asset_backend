@@ -1,7 +1,7 @@
 var jwt = require("jsonwebtoken");
 
-function jwtTokens({ id, email, role }) {
-  const user = { id, email, role };
+function jwtTokens({ id,name, email, role }) {
+  const user = { id,name, email, role };
   const accessToken = jwt.sign(user, "hbkhbkhdsfvwjhfvwhejvf78wyrfbwi8f", {
     expiresIn: "15m",
   });
@@ -11,8 +11,8 @@ function jwtTokens({ id, email, role }) {
   return { user, accessToken, refreshToken };
 }
 
-function accessToken({ id, email, role }) {
-  const user = { id, email, role };
+function accessToken({ id, name, email, role }) {
+  const user = { id,name, email, role };
   const accessToken = jwt.sign(user, "hbkhbkhdsfvwjhfvwhejvf78wyrfbwi8f", {
     expiresIn: "15m",
   });

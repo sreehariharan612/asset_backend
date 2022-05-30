@@ -11,6 +11,7 @@ module.exports = {
       regid: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        unique: true,
         validate: {
           isInt: true,
           isNumeric: true,

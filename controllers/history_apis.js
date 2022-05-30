@@ -28,11 +28,11 @@ const history_staff = async (req, res) => {
         },
         {
           model: Itemstatus,
-          attributes: ["itemno","createdAt"],
+          attributes: ["itemno",],
           include: [
             {
               model: Itementry,
-              attributes: ["quantity"],
+              attributes: ["quantity","createdAt"],
               include: [
                 {
                   model: Ledger,
@@ -81,11 +81,11 @@ const history_item = async (req, res) => {
         },
         {
           model: Itemstatus,
-          attributes: ["itemno","createdAt"],
+          attributes: ["itemno"],
           include: [
             {
               model: Itementry,
-              attributes: ["quantity"],
+              attributes: ["quantity","createdAt"],
               include: [
                 {
                   model: Ledger,

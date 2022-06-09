@@ -67,13 +67,33 @@ const card_api = async (req, res) => {
   }
 
   }
+
+  const itementry = await Itementry.findAll({
+    order: [["id", "DESC"]],
+    limit: 5,
+
+    // // include: { all: true, nested: true },
+    //  include:[ Item, Category]
+    include: [
+      {
+        model: Item,
+        attributes: ["name"],
+        include: [{ model: Category, attributes: ["name"] }],
+      },
+    ],
+    attributes: { exclude: ["itemid","updatedAt"] },
+  });
+
  
 
+
+
     return res.json({
-      totalexpenses: {
-        totalprice: expenses[0].dataValues.total
-      },
-      partexpenses: value
+
+      totalprice: expenses[0].dataValues.total,
+      partexpenses: value,
+      recentdata: itementry
+
     });
   } catch (err) {
     return res.status(500).json(err);

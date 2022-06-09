@@ -88,7 +88,7 @@ const based_on_itemstatus = async (req, res) => {
           ],
         },
       ],
-      attributes: { exclude: ["locationid", "itementryid", "staffid"] },
+      attributes: { exclude: ["locationid", "itementryid", "staffid","createdAt"] },
     });
     return res.json(itemstatus);
   } catch (err) {

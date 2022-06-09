@@ -12,7 +12,7 @@ const firstuser_post = async (req, res) => {
       name: req.body.name,
       email: req.body.email,
       password: hashpassword,
-      role: "HOD",
+      role: req.body.role,
     });
     return res.json(user);
   } catch (err) {
@@ -41,11 +41,11 @@ const user_post = async (req, res) => {
 
     var smtpConfig = {
       host: "smtp.gmail.com",
-      port: 465,
-      secure: true, // use SSL
+      port: 587,
+      secure: false, // use SSL
       auth: {
         user: "sreeharan612@gmail.com", // generated ethereal user
-        pass: "6382574527",
+        pass: "xycitjijisqbtsvh",
       },
     };
     var transporter = nodemailer.createTransport(smtpConfig);
@@ -67,6 +67,7 @@ const user_post = async (req, res) => {
       mailOptions,
       (error, info) => {
         if (error) {
+          console.log(error)
           t.rollback();
           return res.status(500).json({ message: "user not created" });
         } else {
@@ -144,7 +145,7 @@ const forgotpassword = async (req, res) => {
         secure: true, // use SSL
         auth: {
           user: "sreeharan612@gmail.com", // generated ethereal user
-          pass: "6382574527",
+          pass: "xycitjijisqbtsvh",
         },
       };
       var transporter = nodemailer.createTransport(smtpConfig);
@@ -226,7 +227,7 @@ const user_delete = async (req, res) => {
     await user.destroy();
     return res.json(user);
   } catch (err) {
-    return res.status(500).json(err);
+    return res.status(500).json({message: "Record cannot be deleted"});
   }
 };
 
@@ -258,7 +259,7 @@ const changepassword = async (req, res) => {
         secure: true, // use SSL
         auth: {
           user: "sreeharan612@gmail.com", // generated ethereal user
-          pass: "6382574527",
+          pass: "xycitjijisqbtsvh",
         },
       };
       var transporter = nodemailer.createTransport(smtpConfig);

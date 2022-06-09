@@ -32,7 +32,7 @@ const location_delete = async (req, res) => {
     await location.destroy();
     return res.json(location);
   } catch (err) {
-    return res.status(500).json(err);
+    return res.status(500).json({message: "Record cannot be deleted"});
   }
 };
 

@@ -120,7 +120,7 @@ app.get("/user", user_get);
 app.get("/getaccesstoken", user_getaccesstoken);
 
 // hod charts
-app.get("/hod/charts", card_api);
+app.get("/hod/charts/:year", card_api);
 
 app.listen({ port: 5000 }, async () => {
   try {

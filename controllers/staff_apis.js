@@ -32,7 +32,8 @@ const staff_delete = async (req, res) => {
     await staff.destroy();
     return res.json(staff);
   } catch (err) {
-    return res.status(500).json(err);
+    return res.status(500).json({message: "Record cannot be deleted"});
+    
   }
 };
 

@@ -32,7 +32,7 @@ const category_delete = async (req, res) => {
     await category.destroy();
     return res.json(category);
   } catch (err) {
-    return res.status(500).json(err);
+    return res.status(500).json({message: "Record cannot be deleted"});
   }
 };
 

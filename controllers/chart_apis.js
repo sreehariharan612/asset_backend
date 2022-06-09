@@ -10,19 +10,27 @@ const {
 const { Op } = require("sequelize");
 
 const card_api = async (req, res) => {
+  const currentyear = req.params.year;
+  console.log(currentyear)
   try {
+
     const expenses = await Itementry.findAll({
+      where:[
+        sequelize.where(sequelize.fn("date_part",'year',sequelize.col('createdAt')), currentyear)
+      ],
       attributes: [
         [sequelize.fn("sum", sequelize.col("totalprice")), "total"],
-        [sequelize.fn("COUNT", sequelize.col("id")), "entries"],
       ],
     });
 
     const nonconsumableentries = await Ledger.findAll({
+
+      where:[
+        sequelize.where(sequelize.fn("date_part",'year',sequelize.col('Itementry.createdAt')), currentyear)
+      ],
       attributes: [
         "consumetype",
         [sequelize.fn("sum", sequelize.col("Itementry.totalprice")), "total"],
-        [sequelize.fn("COUNT", sequelize.col("Itementry.id")), "entries"],
       ],
       include: [
         {
@@ -32,21 +40,40 @@ const card_api = async (req, res) => {
       ],
       group: ["Ledger.consumetype"],
 
-      // raw:true,
     });
-    // console.log(nonconsumable);
-    // console.log("sds",itementryprice[0].dataValues.total);
+
+    if (nonconsumableentries.length == 0 ){
+      var value = {
+        nonconsumable : 0,
+        consumable: 0
+    }
+  }else if(nonconsumableentries.length == 1){
+    if (nonconsumableentries[0].dataValues.consumetype == "nonconsumable"){
+      var value = {
+        nonconsumable : nonconsumableentries[0].dataValues.total,
+        consumable: 0
+    }
+    }
+    else if (nonconsumableentries[0].dataValues.consumetype == "consumable"){
+      var value = {
+        nonconsumable : 0,
+        consumable: nonconsumableentries[0].dataValues.total
+    }
+    }
+  }else{
+    var value = {
+      consumable : nonconsumableentries[0].dataValues.total,
+      nonconsumable: nonconsumableentries[1].dataValues.total
+  }
+
+  }
+ 
 
     return res.json({
       totalexpenses: {
-        totalprice: expenses[0].dataValues.total,
-        totalentries: expenses[0].dataValues.entries,
+        totalprice: expenses[0].dataValues.total
       },
-      expensesontype: {
-        data: nonconsumableentries,
-        // totalprice: nonconsumable[0].dataValues.total,
-        // totalentries:nonconsumable[0].dataValues.entries
-      },
+      partexpenses: value
     });
   } catch (err) {
     return res.status(500).json(err);

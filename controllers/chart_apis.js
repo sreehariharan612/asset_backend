@@ -84,6 +84,28 @@ const card_api = async (req, res) => {
     attributes: { exclude: ["itemid","updatedAt"] },
   });
 
+
+  const yearexpenses = await Itementry.findAll({
+
+    attributes: [
+      [sequelize.fn("date_part",'year',sequelize.col('createdAt')),"year"],
+      [sequelize.fn("sum", sequelize.col("totalprice")), "total"],
+    ],
+    group: ["year"],
+  
+  });
+
+  const statuscount = await Itemstatus.findAll({
+
+    attributes: [
+      'status',
+      [sequelize.fn('COUNT', sequelize.col('status')), 'total'],
+    ],
+    group: ["status"],
+
+  
+  });
+
  
 
 
@@ -92,7 +114,9 @@ const card_api = async (req, res) => {
 
       totalprice: expenses[0].dataValues.total,
       partexpenses: value,
-      recentdata: itementry
+      recentdata: itementry,
+      yearwisedata: yearexpenses,
+      statuswisedata: statuscount
 
     });
   } catch (err) {

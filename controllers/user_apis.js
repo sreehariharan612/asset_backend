@@ -232,19 +232,22 @@ const user_delete = async (req, res) => {
 };
 
 const changepassword = async (req, res) => {
-  const id = req.params.id;
+  const singleid = req.params.id;
+  console.log(singleid);
   const { email, oldpassword, newpassword } = req.body;
 
   try {
     const user = await User.findOne({
-      where: { id: id },
+      where: { id: singleid },
     });
     const validPassword = await bcrypt.compare(oldpassword, user.password);
+    console.log("validate",validPassword);
     if (!validPassword) {
       return res
         .status(500)
         .json({ error: "Pls enter old password correctly" });
     } else {
+      const t = await sequelize.transaction();
       const hashpassword = await bcrypt.hash(newpassword, 10);
       await user.update(
         {
